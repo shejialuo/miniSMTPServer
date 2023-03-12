@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['filedescriptor_16',['FileDescriptor',['../classFileDescriptor.html',1,'']]]
+  ['tagged_5ferror_4',['tagged_error',['../classtagged__error.html',1,'']]]
 ];
