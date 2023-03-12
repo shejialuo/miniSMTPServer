@@ -1,1 +1,1 @@
-add_library(util STATIC util.cpp)
+add_library(util STATIC util.cpp socket.cpp)
