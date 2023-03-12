@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what_8',['what',['../classtagged__error.html#a2239294d3b9626b52204d59f6f5d2714',1,'tagged_error']]]
+  ['close_22',['close',['../classFileDescriptor.html#a0b4c184bbf05d8882b1c93c30fc797d3',1,'FileDescriptor']]]
 ];
