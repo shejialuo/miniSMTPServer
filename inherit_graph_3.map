@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,141,32"/>
+<area shape="rect" id="node2" href="$classtagged__error.html" title="std::system_error plus the name of what was being attempted." alt="" coords="189,5,295,32"/>
+<area shape="rect" id="node3" href="$classunix__error.html" title="A tagged_error for syscalls." alt="" coords="343,5,431,32"/>
+</map>
