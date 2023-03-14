@@ -56,7 +56,7 @@ std::optional<std::string> State::isCorrectParameters(std::vector<std::string> &
   const std::regex pattern{"(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"};
 
   std::string &command = parameters[0];
-  if (command == "NOOP" || command == "QUIT" || command == "RSET") {
+  if (command == "NOOP" || command == "QUIT" || command == "RSET" || command == "DATA") {
     if (parameters.size() != 1) {
       return "501 " + codeToMessages["501"];
     }
@@ -135,9 +135,25 @@ std::string MailState::transitive(std::vector<std::string> &parameters, std::uni
   return "250 " + codeToMessages["250"];
 }
 
-// TODO: add implementation for RcptState
-RcptState::RcptState() {}
-std::string RcptState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+RcptState::RcptState() {
+  allowed.insert("RCPT");
+  allowed.insert("DATA");
+}
+std::string RcptState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  if (auto result = transitiveHelper(parameters, current); result.has_value()) {
+    return result.value();
+  }
+
+  if (parameters[0] == "DATA") {
+    current = &States::dataStartState;
+  } else if (parameters[0] == "RCPT") {
+    current = &States::rcptState;
+  } else {
+    current = &States::ehloState;
+  }
+
+  return "250 " + codeToMessages["250"];
+}
 
 // TODO: add implementation for DataStartState
 DataStartState::DataStartState() {}

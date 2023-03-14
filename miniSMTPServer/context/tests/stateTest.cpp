@@ -232,3 +232,35 @@ TEST(State, MailStateTransitive) {
     EXPECT_EQ(current, expects[i].second);
   }
 }
+
+TEST(State, RCPTStateTransitive) {
+  std::vector<std::vector<std::string>> tests{
+      {"RSET"},
+      {"NOOP"},
+      {"QUIT"},
+      {"EHLO", "127.0.0.1"},
+      {"RCPT", "shejialuo@gmail.com"},
+      {"MAIL", "shejialuo@gmail.com"},
+      {"DATA"},
+      {"."},
+  };
+
+  std::vector<std::pair<std::string, std::unique_ptr<State> *>> expects{
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::rcptState},
+      {"221 " + codeToMessages["221"], &States::idleState},
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::rcptState},
+      {"503 " + codeToMessages["503"], &States::rcptState},
+      {"250 " + codeToMessages["250"], &States::dataStartState},
+      {"503 " + codeToMessages["503"], &States::rcptState},
+  };
+
+  for (int i = 0; i < tests.size(); ++i) {
+    auto state = std::make_unique<RcptState>();
+    std::unique_ptr<State> *current = &States::rcptState;
+    std::string result = state->transitive(tests[i], current);
+    EXPECT_EQ(result, expects[i].first);
+    EXPECT_EQ(current, expects[i].second);
+  }
+}
