@@ -13,7 +13,7 @@ std::unique_ptr<State> States::rcptState = std::make_unique<RcptState>();
 std::unique_ptr<State> States::dataStartState = std::make_unique<DataStartState>();
 std::unique_ptr<State> States::dataDoneState = std::make_unique<DataDoneState>();
 
-static std::unordered_set<std::string> commands{"EHLO", "MAIL", "RCPT", "RSET", "NOOP", "QUIT"};
+static std::unordered_set<std::string> commands{"EHLO", "MAIL", "RCPT", "RSET", "NOOP", "QUIT", "DATA", "."};
 
 static std::unordered_map<std::string, std::string> codeToMessages{
     {"220", "Service ready"},
@@ -52,7 +52,17 @@ std::string State::transitiveFromQuit(std::unique_ptr<State> *&current) {
 std::string State::transitiveFromNoop() { return "250 " + codeToMessages["250"]; }
 
 std::optional<std::string> State::isCorrectParameters(std::vector<std::string> &parameters) {
-  // TODO: finish later
+  std::string &command = parameters[0];
+  if (command == "NOOP" || command == "QUIT" || command == "RSET") {
+    if (parameters.size() != 1) {
+      return "501 " + codeToMessages["501"];
+    }
+  } else if (parameters[0] == "EHLO") {
+    if (parameters.size() != 2 || parameters[1] != "127.0.0.1") {
+      return "501 " + codeToMessages["501"];
+    }
+  }
+
   return std::nullopt;
 }
 
@@ -77,9 +87,18 @@ std::optional<std::string> State::transitiveHelper(std::vector<std::string> &par
   return std::nullopt;
 }
 
-// TODO: add implementation for IdleState
 IdleState::IdleState() {}
-std::string IdleState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+std::string IdleState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  if (auto result = transitiveHelper(parameters, current); result.has_value()) {
+    return result.value();
+  }
+
+  if (parameters[0] == "EHLO") {
+    current = &States::ehloState;
+  }
+
+  return "250 " + codeToMessages["250"];
+}
 
 // TODO: add implementation for EhloState
 EhloState::EhloState() {}
