@@ -83,3 +83,54 @@ public:
 
   virtual ~State() = default;
 };
+
+class IdleState : public State {
+public:
+  IdleState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~IdleState() override = default;
+};
+
+class EhloState : public State {
+public:
+  EhloState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~EhloState() override = default;
+};
+
+class MailState : public State {
+public:
+  MailState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~MailState() override = default;
+};
+
+class RcptState : public State {
+public:
+  RcptState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~RcptState() override = default;
+};
+
+class DataStartState : public State {
+public:
+  DataStartState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~DataStartState() override = default;
+};
+
+class DataDoneState : public State {
+public:
+  DataDoneState();
+  std::string transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) override;
+  ~DataDoneState() override = default;
+};
+
+struct States {
+  static std::unique_ptr<State> idleState;
+  static std::unique_ptr<State> ehloState;
+  static std::unique_ptr<State> mailState;
+  static std::unique_ptr<State> rcptState;
+  static std::unique_ptr<State> dataStartState;
+  static std::unique_ptr<State> dataDoneState;
+};

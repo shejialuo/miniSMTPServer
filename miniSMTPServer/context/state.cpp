@@ -6,6 +6,13 @@
 #include <unordered_map>
 #include <unordered_set>
 
+std::unique_ptr<State> States::idleState = std::make_unique<IdleState>();
+std::unique_ptr<State> States::ehloState = std::make_unique<EhloState>();
+std::unique_ptr<State> States::mailState = std::make_unique<MailState>();
+std::unique_ptr<State> States::rcptState = std::make_unique<RcptState>();
+std::unique_ptr<State> States::dataStartState = std::make_unique<DataStartState>();
+std::unique_ptr<State> States::dataDoneState = std::make_unique<DataDoneState>();
+
 static std::unordered_set<std::string> commands{"EHLO", "MAIL", "RCPT", "RSET", "NOOP", "QUIT"};
 
 static std::unordered_map<std::string, std::string> codeToMessages{
@@ -38,7 +45,7 @@ std::optional<std::string> State::checkCommand(std::vector<std::string> &paramet
 }
 
 std::string State::transitiveFromQuit(std::unique_ptr<State> *&current) {
-  // TODO: add transition later
+  current = &States::idleState;
   return "221 " + codeToMessages["221"];
 }
 
@@ -68,4 +75,32 @@ std::optional<std::string> State::transitiveHelper(std::vector<std::string> &par
   }
 
   return std::nullopt;
+}
+
+// TODO: add implementation for IdleState
+IdleState::IdleState() {}
+std::string IdleState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+
+// TODO: add implementation for EhloState
+EhloState::EhloState() {}
+std::string EhloState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+
+// TODO: add implementation for MailState
+MailState::MailState() {}
+std::string MailState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+
+// TODO: add implementation for RcptState
+RcptState::RcptState() {}
+std::string RcptState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+
+// TODO: add implementation for DataStartState
+DataStartState::DataStartState() {}
+std::string DataStartState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  return {};
+}
+
+// TODO: add implementation for DataDoneState
+DataDoneState::DataDoneState() {}
+std::string DataDoneState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  return {};
 }
