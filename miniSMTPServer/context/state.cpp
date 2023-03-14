@@ -155,14 +155,26 @@ std::string RcptState::transitive(std::vector<std::string> &parameters, std::uni
   return "250 " + codeToMessages["250"];
 }
 
-// TODO: add implementation for DataStartState
 DataStartState::DataStartState() {}
 std::string DataStartState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
-  return {};
+  if (parameters[0] == "." && parameters.size() == 1) {
+    current = &States::dataDoneState;
+    return "250 " + codeToMessages["250"];
+  }
+  return "354 " + codeToMessages["354"];
 }
 
-// TODO: add implementation for DataDoneState
-DataDoneState::DataDoneState() {}
+DataDoneState::DataDoneState() { allowed.insert("MAIL"); }
 std::string DataDoneState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
-  return {};
+  if (auto result = transitiveHelper(parameters, current); result.has_value()) {
+    return result.value();
+  }
+
+  if (parameters[0] == "MAIL") {
+    current = &States::mailState;
+  } else {
+    current = &States::ehloState;
+  }
+
+  return "250 " + codeToMessages["250"];
 }

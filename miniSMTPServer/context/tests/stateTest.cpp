@@ -264,3 +264,43 @@ TEST(State, RCPTStateTransitive) {
     EXPECT_EQ(current, expects[i].second);
   }
 }
+
+TEST(State, DataStartStateTransitive) {
+  std::vector<std::vector<std::string>> tests{
+      {"RSET"},
+      {"RSET", "1"},
+      {"NOOP"},
+      {"NOOP", "NOOP"},
+      {"QUIT"},
+      {"EHLO", "127.0.0.1"},
+      {"RCPT", "shejialuo@gmail.com"},
+      {"MAIL", "shejialuo@gmail.com"},
+      {"DATA"},
+      {".."},
+      {".", "."},
+      {"."},
+  };
+
+  std::vector<std::pair<std::string, std::unique_ptr<State> *>> expects{
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"354 " + codeToMessages["354"], &States::dataStartState},
+      {"250 " + codeToMessages["250"], &States::dataDoneState},
+  };
+
+  for (int i = 0; i < tests.size(); ++i) {
+    auto state = std::make_unique<DataStartState>();
+    std::unique_ptr<State> *current = &States::dataStartState;
+    std::string result = state->transitive(tests[i], current);
+    EXPECT_EQ(result, expects[i].first);
+    EXPECT_EQ(current, expects[i].second);
+  }
+}
