@@ -12,3 +12,11 @@ For setting up the development environment. You must develop in the UNIX-like en
 + Latest `gcc` or `clang` for compilation.
 + Latest `cmake` for building the project.
 + `clang-format` for formatting the code.
+
+## Build
+
+```sh
+git clone https://github.com/shejialuo/miniSMTPServer
+cd miniSMTPServer && mkdir build && cmake ..
+make - j12
+```
