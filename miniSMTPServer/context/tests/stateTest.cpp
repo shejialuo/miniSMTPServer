@@ -105,6 +105,30 @@ TEST(State, isCorrectParametersEHLO) {
   ASSERT_FALSE(state->isCorrectParameters(successful).has_value());
 }
 
+TEST(State, isCorrectParametersMAIL) {
+  std::vector<std::vector<std::string>> tests{
+      {"MAIL"},
+      {"MAIL", "MAIL"},
+      {"MAIL", "NOOP", "MAIL"},
+      {"MAIL", "shejialuo@gamil..com"},
+      {"EHLO", "shejialuo"},
+      {"EHLO", "shejialuo@.com.com"},
+      {"EHLO", "shejialuo@123.1.cn"},
+  };
+
+  auto state = std::make_unique<IdleState>();
+
+  for (auto &&test : tests) {
+    auto result = state->isCorrectParameters(test);
+    ASSERT_TRUE(result.has_value());
+    ASSERT_EQ(result.value(), "501 " + codeToMessages["501"]);
+  }
+
+  std::vector<std::string> successful{"MAIL", "shejialuo@gmail.com"};
+
+  ASSERT_FALSE(state->isCorrectParameters(successful).has_value());
+}
+
 TEST(State, IdleStateTransitive) {
   std::vector<std::vector<std::string>> tests{
       {"RSET"},
@@ -137,6 +161,40 @@ TEST(State, IdleStateTransitive) {
   for (int i = 0; i < tests.size(); ++i) {
     auto state = std::make_unique<IdleState>();
     std::unique_ptr<State> *current = &States::idleState;
+    std::string result = state->transitive(tests[i], current);
+    EXPECT_EQ(result, expects[i].first);
+    EXPECT_EQ(current, expects[i].second);
+  }
+}
+
+TEST(State, EhloStateTransitive) {
+  std::vector<std::vector<std::string>> tests{
+      {"RSET"},
+      {"NOOP"},
+      {"QUIT"},
+      {"EHLO", "127.0.0.1"},
+      {"MAIL", "shejialuo@gmail.com"},
+      {"RSTE"},
+      {"DATA"},
+      {"."},
+      {"RCPT"},
+  };
+
+  std::vector<std::pair<std::string, std::unique_ptr<State> *>> expects{
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"221 " + codeToMessages["221"], &States::idleState},
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::mailState},
+      {"500 " + codeToMessages["500"], &States::ehloState},
+      {"503 " + codeToMessages["503"], &States::ehloState},
+      {"503 " + codeToMessages["503"], &States::ehloState},
+      {"503 " + codeToMessages["503"], &States::ehloState},
+  };
+
+  for (int i = 0; i < tests.size(); ++i) {
+    auto state = std::make_unique<EhloState>();
+    std::unique_ptr<State> *current = &States::ehloState;
     std::string result = state->transitive(tests[i], current);
     EXPECT_EQ(result, expects[i].first);
     EXPECT_EQ(current, expects[i].second);

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <optional>
+#include <regex>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -52,6 +53,8 @@ std::string State::transitiveFromQuit(std::unique_ptr<State> *&current) {
 std::string State::transitiveFromNoop() { return "250 " + codeToMessages["250"]; }
 
 std::optional<std::string> State::isCorrectParameters(std::vector<std::string> &parameters) {
+  const std::regex pattern{"(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"};
+
   std::string &command = parameters[0];
   if (command == "NOOP" || command == "QUIT" || command == "RSET") {
     if (parameters.size() != 1) {
@@ -59,6 +62,10 @@ std::optional<std::string> State::isCorrectParameters(std::vector<std::string> &
     }
   } else if (parameters[0] == "EHLO") {
     if (parameters.size() != 2 || parameters[1] != "127.0.0.1") {
+      return "501 " + codeToMessages["501"];
+    }
+  } else if (parameters[0] == "MAIL") {
+    if (parameters.size() != 2 || !std::regex_match(parameters[1], pattern)) {
       return "501 " + codeToMessages["501"];
     }
   }
@@ -100,9 +107,18 @@ std::string IdleState::transitive(std::vector<std::string> &parameters, std::uni
   return "250 " + codeToMessages["250"];
 }
 
-// TODO: add implementation for EhloState
-EhloState::EhloState() {}
-std::string EhloState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+EhloState::EhloState() { allowed.insert("MAIL"); }
+std::string EhloState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  if (auto result = transitiveHelper(parameters, current); result.has_value()) {
+    return result.value();
+  }
+
+  if (parameters[0] == "MAIL") {
+    current = &States::mailState;
+  }
+
+  return "250 " + codeToMessages["250"];
+}
 
 // TODO: add implementation for MailState
 MailState::MailState() {}
