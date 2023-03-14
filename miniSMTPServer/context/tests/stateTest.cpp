@@ -200,3 +200,35 @@ TEST(State, EhloStateTransitive) {
     EXPECT_EQ(current, expects[i].second);
   }
 }
+
+TEST(State, MailStateTransitive) {
+  std::vector<std::vector<std::string>> tests{
+      {"RSET"},
+      {"NOOP"},
+      {"QUIT"},
+      {"EHLO", "127.0.0.1"},
+      {"RCPT", "shejialuo@gmail.com"},
+      {"MAIL", "shejialuo@gmail.com"},
+      {"DATA"},
+      {"."},
+  };
+
+  std::vector<std::pair<std::string, std::unique_ptr<State> *>> expects{
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::mailState},
+      {"221 " + codeToMessages["221"], &States::idleState},
+      {"250 " + codeToMessages["250"], &States::ehloState},
+      {"250 " + codeToMessages["250"], &States::rcptState},
+      {"503 " + codeToMessages["503"], &States::mailState},
+      {"503 " + codeToMessages["503"], &States::mailState},
+      {"503 " + codeToMessages["503"], &States::mailState},
+  };
+
+  for (int i = 0; i < tests.size(); ++i) {
+    auto state = std::make_unique<MailState>();
+    std::unique_ptr<State> *current = &States::mailState;
+    std::string result = state->transitive(tests[i], current);
+    EXPECT_EQ(result, expects[i].first);
+    EXPECT_EQ(current, expects[i].second);
+  }
+}

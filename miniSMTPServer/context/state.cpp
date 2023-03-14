@@ -64,7 +64,7 @@ std::optional<std::string> State::isCorrectParameters(std::vector<std::string> &
     if (parameters.size() != 2 || parameters[1] != "127.0.0.1") {
       return "501 " + codeToMessages["501"];
     }
-  } else if (parameters[0] == "MAIL") {
+  } else if (parameters[0] == "MAIL" || parameters[0] == "RCPT") {
     if (parameters.size() != 2 || !std::regex_match(parameters[1], pattern)) {
       return "501 " + codeToMessages["501"];
     }
@@ -120,9 +120,20 @@ std::string EhloState::transitive(std::vector<std::string> &parameters, std::uni
   return "250 " + codeToMessages["250"];
 }
 
-// TODO: add implementation for MailState
-MailState::MailState() {}
-std::string MailState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) { return {}; }
+MailState::MailState() { allowed.insert("RCPT"); }
+std::string MailState::transitive(std::vector<std::string> &parameters, std::unique_ptr<State> *&current) {
+  if (auto result = transitiveHelper(parameters, current); result.has_value()) {
+    return result.value();
+  }
+
+  if (parameters[0] == "RCPT") {
+    current = &States::rcptState;
+  } else {
+    current = &States::ehloState;
+  }
+
+  return "250 " + codeToMessages["250"];
+}
 
 // TODO: add implementation for RcptState
 RcptState::RcptState() {}
