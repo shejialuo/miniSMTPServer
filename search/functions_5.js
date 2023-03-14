@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['listen_25',['listen',['../classTCPSocket.html#abbcc8052062ef85830da9864fe023e80',1,'TCPSocket']]]
+  ['iscorrectparameters_37',['isCorrectParameters',['../classState.html#a6e3e1c95e95d3f2c91cc9a44914cf579',1,'State']]]
 ];

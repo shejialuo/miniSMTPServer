@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['unix_5ferror_19',['unix_error',['../classunix__error.html',1,'']]]
+  ['tagged_5ferror_27',['tagged_error',['../classtagged__error.html',1,'']]],
+  ['tcpsocket_28',['TCPSocket',['../classTCPSocket.html',1,'']]]
 ];

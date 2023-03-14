@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['what_32',['what',['../classtagged__error.html#a2239294d3b9626b52204d59f6f5d2714',1,'tagged_error']]],
-  ['write_33',['write',['../classFileDescriptor.html#a6e38670f8b4670f925e22daa86584a32',1,'FileDescriptor::write(const char *str)'],['../classFileDescriptor.html#a2772852920c501b46fdf71250cca1d9d',1,'FileDescriptor::write(const std::string &amp;str)']]]
+  ['unix_5ferror_49',['unix_error',['../classunix__error.html#aa481b9c8bb3c13ce1cb6aa1bf3f667e2',1,'unix_error']]]
 ];

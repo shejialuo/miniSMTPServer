@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tagged_5ferror_29',['tagged_error',['../classtagged__error.html#a8c7d3c0f87f6faaaffd88cee89b0a90c',1,'tagged_error']]],
-  ['tcpsocket_30',['TCPSocket',['../classTCPSocket.html#a7a50427a401d1a6f3209d51818bad901',1,'TCPSocket']]]
+  ['set_5freuseaddr_40',['set_reuseaddr',['../classTCPSocket.html#a7dae82ae1d9de778a699ec868577baec',1,'TCPSocket']]],
+  ['setsockopt_41',['setsockopt',['../classTCPSocket.html#a41507a392f6a55b14d5c3c7ddb037f57',1,'TCPSocket']]],
+  ['state_42',['State',['../classState.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State']]]
 ];
