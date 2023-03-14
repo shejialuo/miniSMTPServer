@@ -7,3 +7,4 @@ target_include_directories(miniSMTP PRIVATE ./util)
 target_link_libraries(miniSMTP util)
 
 add_subdirectory(./util)
+add_subdirectory(./context)
