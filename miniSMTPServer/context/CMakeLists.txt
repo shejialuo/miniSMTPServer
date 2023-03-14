@@ -1,3 +1,3 @@
-add_library(context STATIC state.cpp)
+add_library(context STATIC state.cpp context.cpp)
 
 add_subdirectory(./tests)
