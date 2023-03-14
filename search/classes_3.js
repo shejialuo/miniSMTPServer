@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['idlestate_36',['IdleState',['../classIdleState.html',1,'']]]
+  ['unix_5ferror_29',['unix_error',['../classunix__error.html',1,'']]]
 ];

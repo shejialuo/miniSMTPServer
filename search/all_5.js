@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['filedescriptor_10',['FileDescriptor',['../classFileDescriptor.html',1,'FileDescriptor'],['../classFileDescriptor.html#a38601e6502236d3f0c6f0a0e53c1b94b',1,'FileDescriptor::FileDescriptor()']]]
+  ['iscorrectparameters_8',['isCorrectParameters',['../classState.html#a6e3e1c95e95d3f2c91cc9a44914cf579',1,'State']]]
 ];
