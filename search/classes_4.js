@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mailstate_37',['MailState',['../classMailState.html',1,'']]]
+  ['idlestate_38',['IdleState',['../classIdleState.html',1,'']]]
 ];

@@ -1,9 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classState.html" title=" " alt="" coords="5,132,61,159"/>
-<area shape="rect" id="node2" href="$classDataDoneState.html" title=" " alt="" coords="109,5,231,32"/>
-<area shape="rect" id="node3" href="$classDataStartState.html" title=" " alt="" coords="111,56,229,83"/>
-<area shape="rect" id="node4" href="$classEhloState.html" title=" " alt="" coords="128,107,212,133"/>
-<area shape="rect" id="node5" href="$classIdleState.html" title=" " alt="" coords="130,157,210,184"/>
-<area shape="rect" id="node6" href="$classMailState.html" title=" " alt="" coords="128,208,212,235"/>
-<area shape="rect" id="node7" href="$classRcptState.html" title=" " alt="" coords="127,259,213,285"/>
+<area shape="rect" id="node1" href="$classFileDescriptor.html" title=" " alt="" coords="5,5,117,32"/>
+<area shape="rect" id="node2" href="$classTCPSocket.html" title=" " alt="" coords="165,5,255,32"/>
 </map>
